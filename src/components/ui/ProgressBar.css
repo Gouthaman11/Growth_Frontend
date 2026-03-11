@@ -1,0 +1,136 @@
+.progress-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-gray-700);
+}
+
+.progress-value {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-gray-900);
+}
+
+.progress-bar {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(229, 231, 235, 0.8) 0%, rgba(243, 244, 246, 0.8) 100%);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Sizes */
+.progress-bar-sm {
+    height: 6px;
+}
+
+.progress-bar-md {
+    height: 10px;
+}
+
+.progress-bar-lg {
+    height: 14px;
+}
+
+/* Fill */
+.progress-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-animated {
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-animated::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+    animation: progress-shimmer 2s infinite;
+}
+
+@keyframes progress-shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Variants */
+.progress-fill-primary {
+    background: var(--gradient-primary);
+}
+
+.progress-fill-secondary {
+    background: var(--gradient-secondary);
+}
+
+.progress-fill-accent {
+    background: var(--gradient-accent);
+}
+
+.progress-fill-success {
+    background: var(--color-success);
+}
+
+.progress-fill-warning {
+    background: var(--color-warning);
+}
+
+.progress-fill-error {
+    background: var(--color-error);
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .progress-bar-lg {
+        height: 12px;
+    }
+
+    .progress-bar-md {
+        height: 8px;
+    }
+
+    .progress-label,
+    .progress-value {
+        font-size: var(--font-size-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .progress-bar-lg {
+        height: 10px;
+    }
+
+    .progress-bar-md {
+        height: 6px;
+    }
+
+    .progress-wrapper {
+        gap: var(--spacing-1);
+    }
+}
