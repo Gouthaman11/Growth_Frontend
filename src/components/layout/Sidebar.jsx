@@ -6,9 +6,6 @@ import {
     FileText,
     Users,
     MessageSquare,
-    Settings,
-    Bell,
-    BarChart3,
     LogOut,
     ChevronLeft,
     ChevronRight,
@@ -38,8 +35,6 @@ const mentorLinks = [
 const adminLinks = [
     { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/admin/users', icon: Users, label: 'User Management' },
-    { to: '/admin/integrations', icon: Settings, label: 'Integrations' },
-    { to: '/admin/announcements', icon: Bell, label: 'Announcements' },
 ]
 
 export default function Sidebar({ role = 'student', mobileOpen = false, onMobileClose, collapsed = false, onToggleCollapse }) {

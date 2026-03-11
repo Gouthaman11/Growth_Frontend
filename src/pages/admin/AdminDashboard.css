@@ -139,100 +139,6 @@
     margin-left: 0.25rem;
 }
 
-/* ---- Bottom Row ---- */
-.admin-bottom-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-}
-
-/* Alerts Card */
-.admin-alerts-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 1.5rem;
-    border-left: 4px solid #f59e0b;
-}
-
-.admin-alerts-card .card-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #1e293b;
-    font-weight: 600;
-    font-size: 1.125rem;
-    margin-bottom: 1.25rem;
-}
-
-.alerts-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.alert-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    color: #334155;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-}
-
-.alert-icon-wrap {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.alert-warning {
-    background: #fff;
-    border-left: 3px solid #f59e0b;
-}
-
-.alert-warning .alert-icon-wrap {
-    background: #fffbeb;
-    color: #f59e0b;
-}
-
-.alert-error {
-    background: #fff;
-    border-left: 3px solid #ef4444;
-}
-
-.alert-error .alert-icon-wrap {
-    background: #fef2f2;
-    color: #ef4444;
-}
-
-.alert-info {
-    background: #fff;
-    border-left: 3px solid #3b82f6;
-}
-
-.alert-info .alert-icon-wrap {
-    background: #eff6ff;
-    color: #3b82f6;
-}
-
-.alert-success {
-    background: #fff;
-    border-left: 3px solid #10b981;
-}
-
-.alert-success .alert-icon-wrap {
-    background: #f0fdf4;
-    color: #10b981;
-}
-
 /* Recent Users Card */
 .admin-recent-card {
     background: #fff;
@@ -317,65 +223,17 @@
     text-overflow: ellipsis;
 }
 
-/* ---- Quick Actions ---- */
-.admin-quick-actions {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-}
-
-.quick-action-card {
-    background: #fff;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    cursor: pointer;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 1.25rem;
-    transition: all 0.2s ease;
-}
-
-.quick-action-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border-color: #cbd5e1;
-}
-
-.quick-action-card span {
-    font-weight: 600;
-    color: #334155;
-    font-size: 0.9375rem;
-}
-
-.qa-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.recent-user-meta {
     flex-shrink: 0;
 }
 
-.qa-icon-users {
-    background: #eff6ff;
-    color: #3b82f6;
-}
-
-.qa-icon-settings {
-    background: #f0fdf4;
-    color: #10b981;
-}
-
-.qa-icon-announce {
-    background: #fffbeb;
-    color: #f59e0b;
-}
-
-.qa-icon-reports {
-    background: #faf5ff;
-    color: #8b5cf6;
+.recent-user-dept {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
 }
 
 /* ============================================
@@ -1054,10 +912,6 @@
         grid-template-columns: 1fr;
     }
 
-    .admin-quick-actions {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
     .role-summary-cards {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1066,10 +920,6 @@
 @media (max-width: 1024px) {
     .admin-stats-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .admin-bottom-row {
-        grid-template-columns: 1fr;
     }
 
     .users-table-header,
@@ -1121,177 +971,5 @@
 
     .user-cell {
         margin-bottom: 0.5rem;
-    }
-}
-
-/* ============================================
-   Integration Settings
-   ============================================ */
-
-.integration-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.integration-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: all 0.2s ease;
-}
-
-.integration-card:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    border-color: #cbd5e1;
-    transform: translateY(-2px);
-}
-
-.integration-header {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
-}
-
-.integration-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.integration-icon.github {
-    background: #181717;
-    color: #fff;
-}
-
-.integration-icon.leetcode {
-    background: #fffbeb;
-    color: #f59e0b;
-}
-
-.integration-icon.hackerrank {
-    background: #f0fdf4;
-    color: #10b981;
-}
-
-.integration-icon.academic {
-    background: #eff6ff;
-    color: #3b82f6;
-}
-
-.integration-info {
-    flex: 1;
-}
-
-.integration-info h3 {
-    margin: 0 0 0.25rem 0;
-    font-size: 1.125rem;
-    color: #1e293b;
-    font-weight: 600;
-}
-
-.integration-info p {
-    margin: 0;
-    font-size: 0.875rem;
-    color: #64748b;
-    line-height: 1.4;
-}
-
-.integration-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    padding: 1.25rem 0;
-    border-top: 1px solid #f1f5f9;
-    border-bottom: 1px solid #f1f5f9;
-    margin-bottom: 1.25rem;
-}
-
-.integration-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.integration-stat-value {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #1e293b;
-}
-
-.integration-stat-label {
-    font-size: 0.75rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-}
-
-.integration-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.75rem;
-}
-
-.sync-info {
-    margin-right: auto;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.75rem;
-    color: #94a3b8;
-}
-
-/* API Settings */
-.api-settings-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.api-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.api-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.api-item:last-child {
-    border-bottom: none;
-}
-
-.api-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.api-info strong {
-    color: #1e293b;
-    font-size: 0.9375rem;
-}
-
-.api-info span {
-    color: #64748b;
-    font-size: 0.8125rem;
-}
-
-@media (max-width: 1024px) {
-    .integration-grid {
-        grid-template-columns: 1fr;
     }
 }

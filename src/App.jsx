@@ -29,8 +29,6 @@ import MentorCourses from './pages/mentor/MentorCourses'
 // Admin
 import AdminDashboard from './pages/admin/AdminDashboard'
 import UserManagement from './pages/admin/UserManagement'
-import IntegrationSettings from './pages/admin/IntegrationSettings'
-import Announcements from './pages/admin/Announcements'
 
 // Shared
 import Profile from './pages/profile/Profile'
@@ -133,16 +131,6 @@ function AppRoutes() {
             <Route path="/admin/users" element={
                 <ProtectedRoute allowedRoles={['admin']}>
                     <UserManagement />
-                </ProtectedRoute>
-            } />
-            <Route path="/admin/integrations" element={
-                <ProtectedRoute allowedRoles={['admin']}>
-                    <IntegrationSettings />
-                </ProtectedRoute>
-            } />
-            <Route path="/admin/announcements" element={
-                <ProtectedRoute allowedRoles={['admin']}>
-                    <Announcements />
                 </ProtectedRoute>
             } />
 
