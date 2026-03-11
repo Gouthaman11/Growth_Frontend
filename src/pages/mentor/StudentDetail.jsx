@@ -850,45 +850,7 @@ export default function StudentDetail() {
                                             Last analyzed: {new Date(student.resumeData.lastAnalyzed).toLocaleDateString()}
                                         </p>
                                     )}
-                                    <button
-                                        className="sd-ats-view-resume-btn"
-                                        onClick={async () => {
-                                            try {
-                                                // First try loading from API
-                                                const res = await groqAPI.getResumeFile(student.id)
-                                                const base64 = res?.fileBase64 || student.resumeData?.resumeFileBase64
-                                                if (base64) {
-                                                    const byteChars = atob(base64)
-                                                    const byteArr = new Uint8Array(byteChars.length)
-                                                    for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i)
-                                                    const fileName = res?.fileName || student.resumeData?.resumeFileName || 'resume.pdf'
-                                                    const isPdf = fileName.toLowerCase().endsWith('.pdf')
-                                                    const blob = new Blob([byteArr], { type: isPdf ? 'application/pdf' : 'text/plain' })
-                                                    const url = URL.createObjectURL(blob)
-                                                    window.open(url, '_blank')
-                                                } else {
-                                                    alert('Resume file not available. The student may need to re-upload their resume.')
-                                                }
-                                            } catch {
-                                                // Fallback: try using already-loaded data
-                                                const base64 = student.resumeData?.resumeFileBase64
-                                                if (base64) {
-                                                    const byteChars = atob(base64)
-                                                    const byteArr = new Uint8Array(byteChars.length)
-                                                    for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i)
-                                                    const isPdf = (student.resumeData?.resumeFileName || '').toLowerCase().endsWith('.pdf')
-                                                    const blob = new Blob([byteArr], { type: isPdf ? 'application/pdf' : 'text/plain' })
-                                                    const url = URL.createObjectURL(blob)
-                                                    window.open(url, '_blank')
-                                                } else {
-                                                    alert('Resume file not available. The student may need to re-upload their resume.')
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        <Download size={14} />
-                                        View Resume
-                                    </button>
+
                                 </div>
                             </div>
                         )}
