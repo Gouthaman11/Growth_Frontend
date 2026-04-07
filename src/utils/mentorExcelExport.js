@@ -213,6 +213,7 @@ const collectCodingRows = async (students, fetchCodingData) => {
             const github = codingData?.github || {}
 
             return {
+                department: student.department || 'ZZZ',
                 studentName: student.fullName || 'N/A',
                 registerNumber: student.rollNumber || 'N/A',
                 leetcodeUsername: student.codingProfiles?.leetcode || 'N/A',
@@ -228,7 +229,11 @@ const collectCodingRows = async (students, fetchCodingData) => {
         })
     )
 
-    return rows.sort((a, b) => a.studentName.localeCompare(b.studentName))
+    return rows.sort((a, b) => {
+        const departmentCompare = (a.department || '').localeCompare(b.department || '', undefined, { sensitivity: 'base' })
+        if (departmentCompare !== 0) return departmentCompare
+        return (a.studentName || '').localeCompare(b.studentName || '', undefined, { sensitivity: 'base' })
+    })
 }
 
 export const exportMentorStudentCodingReport = async ({ students, mentorName, departmentScope, fetchCodingData }) => {
