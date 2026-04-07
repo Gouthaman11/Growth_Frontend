@@ -530,6 +530,54 @@ export default function StudentDashboard() {
 
     // Generate activity heatmap data for last 30 days
     const getActivityHeatmap = useCallback(() => {
+        const getLocalDateKey = (dateObj) => {
+            const year = dateObj.getFullYear()
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+            const day = String(dateObj.getDate()).padStart(2, '0')
+            return `${year}-${month}-${day}`
+        }
+
+        const normalizeDateKey = (recordDate) => {
+            if (!recordDate) return null
+            if (typeof recordDate === 'string' && recordDate.length >= 10) {
+                return recordDate.slice(0, 10)
+            }
+            return getLocalDateKey(new Date(recordDate))
+        }
+
+        // Build per-day coding work from deltas of cumulative totals.
+        const dailyWorkMap = {}
+        const sortedHistory = [...progressHistory].sort(
+            (a, b) => new Date(a.recordDate || a.record_date) - new Date(b.recordDate || b.record_date)
+        )
+
+        let prevCommitsTotal = null
+        let prevProblemsTotal = null
+
+        sortedHistory.forEach((record) => {
+            const dateKey = normalizeDateKey(record.recordDate || record.record_date)
+            if (!dateKey) return
+
+            const commitsTotal = record.githubCommits || record.github_commits || 0
+            const problemsTotal = record.leetcodeTotal || record.leetcode_total || 0
+
+            let commitsDelta = 0
+            let problemsDelta = 0
+            if (prevCommitsTotal !== null && prevProblemsTotal !== null) {
+                commitsDelta = Math.max(0, commitsTotal - prevCommitsTotal)
+                problemsDelta = Math.max(0, problemsTotal - prevProblemsTotal)
+            }
+
+            const prevDayWork = dailyWorkMap[dateKey] || { commits: 0, problems: 0 }
+            dailyWorkMap[dateKey] = {
+                commits: Math.max(prevDayWork.commits, commitsDelta),
+                problems: Math.max(prevDayWork.problems, problemsDelta)
+            }
+
+            prevCommitsTotal = commitsTotal
+            prevProblemsTotal = problemsTotal
+        })
+
         const today = new Date()
         const heatmapData = []
 
@@ -537,15 +585,10 @@ export default function StudentDashboard() {
             const date = new Date(today)
             date.setDate(date.getDate() - i)
 
-            // Find matching history entry - handle both camelCase and snake_case
-            const historyEntry = progressHistory.find(h => {
-                const recordDate = h.recordDate || h.record_date
-                const hDate = new Date(recordDate)
-                return hDate.toDateString() === date.toDateString()
-            })
-
-            const commits = historyEntry?.githubCommits || historyEntry?.github_commits || 0
-            const problems = historyEntry?.leetcodeTotal || historyEntry?.leetcode_total || 0
+            const dateKey = getLocalDateKey(date)
+            const dayWork = dailyWorkMap[dateKey] || { commits: 0, problems: 0 }
+            const commits = dayWork.commits
+            const problems = dayWork.problems
             const activity = commits + (problems * 2) // Weight problems more
 
             // Determine intensity level (0-4)
@@ -1289,7 +1332,7 @@ export default function StudentDashboard() {
                 <CardHeader>
                     <CardTitle>
                         <Calendar size={20} />
-                        30-Day Activity Heatmap
+                        30-Day Coding Work Heatmap
                     </CardTitle>
                     <Badge variant="secondary" size="sm">Last 30 days</Badge>
                 </CardHeader>
@@ -1300,8 +1343,8 @@ export default function StudentDashboard() {
                                 <div
                                     key={idx}
                                     className={`heatmap-cell level-${day.level}`}
-                                    title={`${day.dateStr}: ${day.commits} commits, ${day.problems} problems`}
-                                    data-tooltip={`${day.commits} commits • ${day.problems} problems`}
+                                    title={`${day.dateStr}: ${day.problems} LeetCode solved, ${day.commits} GitHub commits`}
+                                    data-tooltip={`${day.problems} LeetCode solved • ${day.commits} GitHub commits`}
                                 >
                                     <span className="heatmap-day">{day.day}</span>
                                 </div>

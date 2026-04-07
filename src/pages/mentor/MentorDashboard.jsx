@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { groqAPI, userAPI } from '../../services/api'
+import { groqAPI, userAPI, codingDataAPI } from '../../services/api'
 import DashboardLayout from '../../components/layout/DashboardLayout'
+import { exportMentorStudentCodingReport } from '../../utils/mentorExcelExport'
 import {
     Users,
     AlertTriangle,
@@ -27,7 +28,8 @@ import {
     Clock,
     BookOpen,
     FileText,
-    Trophy
+    Trophy,
+    Download
 } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import './MentorDashboard.css'
@@ -53,6 +55,7 @@ export default function MentorDashboard() {
     const [atsLeaderboard, setAtsLeaderboard] = useState([])
     const [atsLoading, setAtsLoading] = useState(false)
     const [rankingsMap, setRankingsMap] = useState({})
+    const [exporting, setExporting] = useState(false)
 
     const mentorDepartment = userData?.department?.toLowerCase()
 
@@ -246,6 +249,25 @@ export default function MentorDashboard() {
         navigate(`/mentor/student/${studentId}`)
     }
 
+    const handleExportStudentCodingData = async () => {
+        if (students.length === 0) return
+
+        setExporting(true)
+        try {
+            await exportMentorStudentCodingReport({
+                students,
+                mentorName: userData?.fullName || 'Mentor',
+                departmentScope: showAllDepartments ? 'All Departments' : (mentorDepartment?.toUpperCase() || 'N/A'),
+                fetchCodingData: (studentId) => codingDataAPI.get(studentId)
+            })
+        } catch (error) {
+            console.error('Error exporting coding data:', error)
+            window.alert('Unable to export Excel right now. Please try again.')
+        } finally {
+            setExporting(false)
+        }
+    }
+
     const TrendIndicator = ({ value }) => {
         if (!value || value === 0) return <span className="md-trend-neutral">—</span>
         return value > 0 ? (
@@ -289,6 +311,14 @@ export default function MentorDashboard() {
                         </p>
                     </div>
                     <div className="md-header-right">
+                        <button
+                            className="md-btn md-btn-ghost"
+                            onClick={handleExportStudentCodingData}
+                            disabled={exporting || students.length === 0}
+                        >
+                            <Download size={15} />
+                            {exporting ? 'Exporting...' : 'Export Excel'}
+                        </button>
                         <button className="md-btn md-btn-ghost" onClick={loadStudents}>
                             <RefreshCw size={15} />
                             Refresh

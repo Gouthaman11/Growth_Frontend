@@ -96,25 +96,47 @@ export default function Reports() {
                 })).reverse() // Chronological
 
             // --- Process Heatmap Data ---
+            // Use day-over-day coding deltas so heatmap reflects real work, not just login records.
+            const sortedHistory = [...(progressHistory || [])]
+                .sort((a, b) => new Date(a.recordDate) - new Date(b.recordDate))
+
+            const dailyActivityByDate = {}
+            let prevLeetcodeTotal = null
+            let prevGithubCommits = null
+
+            sortedHistory.forEach((record) => {
+                const dateStr = record.recordDate
+                const currentLeetcodeTotal = record.leetcodeTotal || 0
+                const currentGithubCommits = record.githubCommits || 0
+
+                let activity = 0
+                if (prevLeetcodeTotal !== null && prevGithubCommits !== null) {
+                    const leetcodeDelta = Math.max(0, currentLeetcodeTotal - prevLeetcodeTotal)
+                    const githubDelta = Math.max(0, currentGithubCommits - prevGithubCommits)
+                    activity = leetcodeDelta + githubDelta
+                }
+
+                dailyActivityByDate[dateStr] = Math.max(dailyActivityByDate[dateStr] || 0, activity)
+                prevLeetcodeTotal = currentLeetcodeTotal
+                prevGithubCommits = currentGithubCommits
+            })
+
             const today = new Date()
             const heatmapData = []
-            // Generate last 120 days empty grid
+            // Generate last 120 days grid.
             for (let i = 119; i >= 0; i--) {
                 const d = new Date()
                 d.setDate(today.getDate() - i)
                 const dateStr = d.toISOString().split('T')[0]
-                const record = progressHistory?.find(h => h.recordDate === dateStr)
+                const activity = dailyActivityByDate[dateStr] || 0
 
-                // Calculate intensity based on activity (leetcode + commits)
                 let intensity = 0
-                if (record) {
-                    const activity = (record.leetcodeTotal || 0) + (record.githubCommits || 0)
-                    if (activity > 0) intensity = 1
-                    if (activity > 3) intensity = 2
-                    if (activity > 6) intensity = 3
-                    if (activity > 10) intensity = 4
-                }
-                heatmapData.push({ date: d, intensity, dateStr })
+                if (activity > 0) intensity = 1
+                if (activity > 3) intensity = 2
+                if (activity > 6) intensity = 3
+                if (activity > 10) intensity = 4
+
+                heatmapData.push({ date: d, intensity, dateStr, activity })
             }
 
             // --- Process Skills Radar Data ---
@@ -313,7 +335,7 @@ export default function Reports() {
                     {/* Consistency Heatmap */}
                     <Card className="chart-card wide">
                         <CardHeader>
-                            <CardTitle icon={<Calendar size={20} />}>Consistency Map (Last 4 Months)</CardTitle>
+                            <CardTitle icon={<Calendar size={20} />}>Coding Activity Heatmap (Last 4 Months)</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="heatmap-container">
@@ -322,7 +344,7 @@ export default function Reports() {
                                         <div
                                             key={i}
                                             className={`heatmap-cell intensity-${day.intensity}`}
-                                            title={`${day.dateStr}: Level ${day.intensity}`}
+                                            title={`${day.dateStr}: ${day.activity} coding actions (LeetCode solved + GitHub commits)`}
                                         ></div>
                                     ))}
                                 </div>
